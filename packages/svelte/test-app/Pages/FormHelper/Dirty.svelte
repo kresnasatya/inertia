@@ -33,8 +33,8 @@
     <input type="text" id="name" name="name" bind:value={$form.name} />
   </label>
 
-  <button on:click={submit} class="submit">Submit form</button>
-  <button on:click={defaults} class="defaults">Defaults</button>
-  <button on:click={dataAndDefaults} class="data-and-defaults">Data and Defaults</button>
-  <button on:click={pushValue} class="push">Push value</button>
+  <button onclick={submit} class="submit">Submit form</button>
+  <button onclick={defaults} class="defaults">Defaults</button>
+  <button onclick={dataAndDefaults} class="data-and-defaults">Data and Defaults</button>
+  <button onclick={pushValue} class="push">Push value</button>
 </div>

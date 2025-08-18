@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import SiteLayout from '@/Layouts/SiteLayout.svelte'
   import type { ComponentType } from 'svelte'
 

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   declare global {
     namespace svelteHTML {
       interface HTMLAttributes {
@@ -9,11 +9,16 @@
 </script>
 
 <script lang="ts">
-  let slot: HTMLDivElement
-  let documentScrollTop = 0
-  let documentScrollLeft = 0
-  let slotScrollTop = 0
-  let slotScrollLeft = 0
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
+  let slot: HTMLDivElement = $state()
+  let documentScrollTop = $state(0)
+  let documentScrollLeft = $state(0)
+  let slotScrollTop = $state(0)
+  let slotScrollLeft = $state(0)
 
   const handleScrollEvent = () => {
     documentScrollTop = document.documentElement.scrollTop
@@ -23,7 +28,7 @@
   }
 </script>
 
-<svelte:document on:scroll={handleScrollEvent} />
+<svelte:document onscroll={handleScrollEvent} />
 
 <div style="width: 200vw">
   <span class="layout-text">With scroll regions</span>
@@ -35,9 +40,9 @@
       id="slot"
       scroll-region
       style="height: 100px; width: 500px; overflow: scroll"
-      on:scroll={handleScrollEvent}
+      onscroll={handleScrollEvent}
     >
-      <slot />
+      {@render children?.()}
     </div>
   </div>
 </div>

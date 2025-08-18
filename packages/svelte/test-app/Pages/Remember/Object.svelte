@@ -1,7 +1,7 @@
 <script lang="ts">
   import { inertia, useRemember } from '@inertiajs/svelte'
 
-  let untracked = ''
+  let untracked = $state('')
 
   const form = useRemember({
     name: '',

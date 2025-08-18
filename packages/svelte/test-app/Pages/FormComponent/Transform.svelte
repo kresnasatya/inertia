@@ -2,9 +2,9 @@
   import { Form } from '@inertiajs/svelte'
   import type { FormDataConvertible } from '@inertiajs/core'
 
-  let transformType = 'none'
+  let transformType = $state('none')
 
-  $: getTransform = () => {
+  let getTransform = $derived(() => {
     switch (transformType) {
       case 'uppercase':
         return (data: Record<string, FormDataConvertible>) => ({
@@ -19,16 +19,16 @@
       default:
         return (data: Record<string, FormDataConvertible>) => data
     }
-  }
+  })
 </script>
 
 <div>
   <h1>Transform Function</h1>
 
   <div>
-    <button on:click={() => (transformType = 'none')}>None</button>
-    <button on:click={() => (transformType = 'uppercase')}>Uppercase</button>
-    <button on:click={() => (transformType = 'format')}>Format</button>
+    <button onclick={() => (transformType = 'none')}>None</button>
+    <button onclick={() => (transformType = 'uppercase')}>Uppercase</button>
+    <button onclick={() => (transformType = 'format')}>Format</button>
   </div>
 
   <div>Current transform: {transformType}</div>

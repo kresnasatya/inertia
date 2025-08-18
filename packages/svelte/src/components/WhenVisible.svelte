@@ -2,15 +2,29 @@
   import { router, type ReloadOptions } from '@inertiajs/core'
   import { onDestroy, onMount } from 'svelte'
 
-  export let data: string | string[] = ''
-  export let params: ReloadOptions = {}
-  export let buffer: number = 0
-  export let as: keyof HTMLElementTagNameMap = 'div'
-  export let always: boolean = false
+  interface Props {
+    data?: string | string[];
+    params?: ReloadOptions;
+    buffer?: number;
+    as?: keyof HTMLElementTagNameMap;
+    always?: boolean;
+    children?: import('svelte').Snippet;
+    fallback?: import('svelte').Snippet;
+  }
 
-  let loaded = false
+  let {
+    data = '',
+    params = {},
+    buffer = 0,
+    as = 'div',
+    always = false,
+    children,
+    fallback
+  }: Props = $props();
+
+  let loaded = $state(false)
   let fetching = false
-  let el: HTMLElement
+  let el: HTMLElement = $state()
   let observer: IntersectionObserver | null = null
 
   onMount(() => {
@@ -81,7 +95,7 @@
 {/if}
 
 {#if loaded}
-  <slot />
-{:else if $$slots.fallback}
-  <slot name="fallback" />
+  {@render children?.()}
+{:else if fallback}
+  {@render fallback?.()}
 {/if}

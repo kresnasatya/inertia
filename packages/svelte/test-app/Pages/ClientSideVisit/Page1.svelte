@@ -7,12 +7,16 @@
     bar: string
   }
 
-  export let foo: string
-  export let bar: string
+  interface Props {
+    foo: string;
+    bar: string;
+  }
 
-  let errors = 0
-  let finished = 0
-  let success = 0
+  let { foo, bar }: Props = $props();
+
+  let errors = $state(0)
+  let finished = $state(0)
+  let success = $state(0)
 
   const bagErrors = () => {
     router.replace({
@@ -60,10 +64,10 @@
 <div>
   <div>{foo}</div>
   <div>{bar}</div>
-  <button on:click={replace}>Replace</button>
-  <button on:click={push}>Push</button>
-  <button on:click={defaultErrors}>Errors (default)</button>
-  <button on:click={bagErrors}>Errors (bag)</button>
+  <button onclick={replace}>Replace</button>
+  <button onclick={push}>Push</button>
+  <button onclick={defaultErrors}>Errors (default)</button>
+  <button onclick={bagErrors}>Errors (bag)</button>
   <div>Errors: {errors}</div>
   <div>Finished: {finished}</div>
   <div>Success: {success}</div>

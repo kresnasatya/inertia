@@ -1,8 +1,8 @@
 <script lang="ts">
   import { inertia } from '@inertiajs/svelte'
 
-  let documentScrollTop = 0
-  let documentScrollLeft = 0
+  let documentScrollTop = $state(0)
+  let documentScrollLeft = $state(0)
 
   const handleScrollEvent = () => {
     documentScrollTop = document.documentElement.scrollTop
@@ -10,7 +10,7 @@
   }
 </script>
 
-<svelte:document on:scroll={handleScrollEvent} />
+<svelte:document onscroll={handleScrollEvent} />
 
 <div>
   <span class="text">This is the links page that demonstrates url fragment behaviour</span>

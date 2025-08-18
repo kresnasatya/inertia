@@ -3,7 +3,7 @@
   import ComponentB from '@/Pages/Remember/Components/ComponentB.svelte'
   import { inertia, useRemember } from '@inertiajs/svelte'
 
-  let untracked = ''
+  let untracked = $state('')
 
   const form = useRemember({
     name: '',

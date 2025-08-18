@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   declare global {
     interface Window {
       messages: unknown[]
@@ -7,6 +7,8 @@
 </script>
 
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { inertia, page, router } from '@inertiajs/svelte'
 
   const payloadWithFile = {
@@ -488,151 +490,151 @@
 
 <div>
   <!-- Listeners -->
-  <a href={'#'} on:click|preventDefault={withoutEventListeners} class="without-listeners">Basic Visit</a>
-  <a href={'#'} on:click|preventDefault={removeInertiaListener} class="remove-inertia-listener"
+  <a href={'#'} onclick={preventDefault(withoutEventListeners)} class="without-listeners">Basic Visit</a>
+  <a href={'#'} onclick={preventDefault(removeInertiaListener)} class="remove-inertia-listener"
     >Remove Inertia Listener</a
   >
 
   <!-- Events: Before -->
-  <a href={'#'} on:click|preventDefault={beforeVisit} class="before">Before Event</a>
-  <a href={'#'} on:click|preventDefault={beforeVisitPreventLocal} class="before-prevent-local">Before Event (Prevent)</a
+  <a href={'#'} onclick={preventDefault(beforeVisit)} class="before">Before Event</a>
+  <a href={'#'} onclick={preventDefault(beforeVisitPreventLocal)} class="before-prevent-local">Before Event (Prevent)</a
   >
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:before={(event) => internalAlert('linkOnBefore', event.detail.visit)}
-    on:start={() => internalAlert('linkOnStart')}
+    onbefore={(event) => internalAlert('linkOnBefore', event.detail.visit)}
+    onstart={() => internalAlert('linkOnStart')}
     class="link-before">Before Event Link</button
   >
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:before={(event) => {
+    onbefore={(event) => {
       event.preventDefault()
       internalAlert('linkOnBefore')
     }}
-    on:start={() => {
+    onstart={() => {
       internalAlert('This listener should not have been called.')
     }}
     class="link-before-prevent-local">Before Event Link (Prevent)</button
   >
-  <a href={'#'} on:click|preventDefault={beforeVisitPreventGlobalInertia} class="before-prevent-global-inertia"
+  <a href={'#'} onclick={preventDefault(beforeVisitPreventGlobalInertia)} class="before-prevent-global-inertia"
     >Before Event - Prevent globally using Inertia Event Listener</a
   >
-  <a href={'#'} on:click|preventDefault={beforeVisitPreventGlobalNative} class="before-prevent-global-native"
+  <a href={'#'} onclick={preventDefault(beforeVisitPreventGlobalNative)} class="before-prevent-global-native"
     >Before Event - Prevent globally using Native Event Listeners</a
   >
 
   <!-- Events: CancelToken -->
-  <a href={'#'} on:click|preventDefault={cancelTokenVisit} class="canceltoken">Cancel Token Event</a>
+  <a href={'#'} onclick={preventDefault(cancelTokenVisit)} class="canceltoken">Cancel Token Event</a>
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:cancel-token={(event) => internalAlert('linkOnCancelToken', event.detail)}
+    oncancel-token={(event) => internalAlert('linkOnCancelToken', event.detail)}
     class="link-canceltoken">Cancel Token Event Link</button
   >
 
   <!-- Events: Cancel -->
-  <a href={'#'} on:click|preventDefault={cancelVisit} class="cancel">Cancel Event</a>
+  <a href={'#'} onclick={preventDefault(cancelVisit)} class="cancel">Cancel Event</a>
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:cancel-token={handleCancelToken}
-    on:cancel={handleCancel}
+    oncancel-token={handleCancelToken}
+    oncancel={handleCancel}
     class="link-cancel">Cancel Event Link</button
   >
 
   <!-- Events: Start -->
-  <a href={'#'} on:click|preventDefault={startVisit} class="start">Start Event</a>
+  <a href={'#'} onclick={preventDefault(startVisit)} class="start">Start Event</a>
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:start={(event) => internalAlert('linkOnStart', event.detail.visit)}
+    onstart={(event) => internalAlert('linkOnStart', event.detail.visit)}
     class="link-start">Start Event Link</button
   >
 
   <!-- Events: Progress -->
-  <a href={'#'} on:click|preventDefault={progressVisit} class="progress">Progress Event</a>
-  <a href={'#'} on:click|preventDefault={progressNoFilesVisit} class="progress-no-files"
+  <a href={'#'} onclick={preventDefault(progressVisit)} class="progress">Progress Event</a>
+  <a href={'#'} onclick={preventDefault(progressNoFilesVisit)} class="progress-no-files"
     >Missing Progress Event (no files)</a
   >
   <button
     use:inertia={{ href: $page.url, method: 'post', data: payloadWithFile }}
-    on:progress={handleProgress}
+    onprogress={handleProgress}
     class="link-progress">Progress Event Link</button
   >
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:before={() => internalAlert('linkProgressNoFilesOnBefore')}
-    on:progress={handleProgress}
+    onbefore={() => internalAlert('linkProgressNoFilesOnBefore')}
+    onprogress={handleProgress}
     class="link-progress-no-files">Progress Event Link (no files)</button
   >
 
   <!-- Events: Error -->
-  <a href={'#'} on:click|preventDefault={errorVisit} class="error">Error Event</a>
-  <a href={'#'} on:click|preventDefault={errorPromiseVisit} class="error-promise"
+  <a href={'#'} onclick={preventDefault(errorVisit)} class="error">Error Event</a>
+  <a href={'#'} onclick={preventDefault(errorPromiseVisit)} class="error-promise"
     >Error Event (delaying onFinish w/ Promise)</a
   >
   <button
     use:inertia={{ href: '/events/errors', method: 'post' }}
-    on:error={handleError}
-    on:success={() => internalAlert('This listener should not have been called')}
+    onerror={handleError}
+    onsuccess={() => internalAlert('This listener should not have been called')}
     class="link-error">Error Event Link</button
   >
   <button
     use:inertia={{ href: '/events/errors', method: 'post' }}
-    on:error={() => callbackSuccessErrorPromise('linkOnError')}
-    on:success={() => internalAlert('This listener should not have been called')}
-    on:finish={() => internalAlert('linkOnFinish')}
+    onerror={() => callbackSuccessErrorPromise('linkOnError')}
+    onsuccess={() => internalAlert('This listener should not have been called')}
+    onfinish={() => internalAlert('linkOnFinish')}
     class="link-error-promise">Error Event Link (delaying onFinish w/ Promise)</button
   >
 
   <!-- Events: Success -->
-  <a href={'#'} on:click|preventDefault={successVisit} class="success">Success Event</a>
-  <a href={'#'} on:click|preventDefault={successPromiseVisit} class="success-promise"
+  <a href={'#'} onclick={preventDefault(successVisit)} class="success">Success Event</a>
+  <a href={'#'} onclick={preventDefault(successPromiseVisit)} class="success-promise"
     >Success Event (delaying onFinish w/ Promise)</a
   >
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:error={() => internalAlert('This listener should not have been called')}
-    on:success={(event) => internalAlert('linkOnSuccess', event.detail.page)}
+    onerror={() => internalAlert('This listener should not have been called')}
+    onsuccess={(event) => internalAlert('linkOnSuccess', event.detail.page)}
     class="link-success">Success Event Link</button
   >
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:error={() => internalAlert('This listener should not have been called')}
-    on:success={() => callbackSuccessErrorPromise('linkOnSuccess')}
-    on:finish={() => internalAlert('linkOnFinish')}
+    onerror={() => internalAlert('This listener should not have been called')}
+    onsuccess={() => callbackSuccessErrorPromise('linkOnSuccess')}
+    onfinish={() => internalAlert('linkOnFinish')}
     class="link-success-promise">Success Event Link (delaying onFinish w/ Promise)</button
   >
 
   <!-- Events: Invalid -->
-  <a href={'#'} on:click|preventDefault={invalidVisit} class="invalid">Invalid Event</a>
+  <a href={'#'} onclick={preventDefault(invalidVisit)} class="invalid">Invalid Event</a>
 
   <!-- Events: Exception -->
-  <a href={'#'} on:click|preventDefault={exceptionVisit} class="exception">Exception Event</a>
+  <a href={'#'} onclick={preventDefault(exceptionVisit)} class="exception">Exception Event</a>
 
   <!-- Events: Finish -->
-  <a href={'#'} on:click|preventDefault={finishVisit} class="finish">Finish Event</a>
+  <a href={'#'} onclick={preventDefault(finishVisit)} class="finish">Finish Event</a>
   <button
     use:inertia={{ href: $page.url, method: 'post' }}
-    on:finish={(event) => internalAlert('linkOnFinish', event.detail.visit)}
+    onfinish={(event) => internalAlert('linkOnFinish', event.detail.visit)}
     class="link-finish">Finish Event Link</button
   >
 
   <!-- Events: Navigate -->
-  <a href={'#'} on:click|preventDefault={navigateVisit} class="navigate">Navigate Event</a>
+  <a href={'#'} onclick={preventDefault(navigateVisit)} class="navigate">Navigate Event</a>
 
   <!-- Events: Prefetch -->
   <button
     use:inertia={{ href: '/prefetch/2', prefetch: 'hover' }}
-    on:prefetching={(event) => internalAlert('linkOnPrefetching', event.detail.visit)}
-    on:prefetched={(event) => internalAlert('linkOnPrefetched', event.detail.response, event.detail.visit)}
+    onprefetching={(event) => internalAlert('linkOnPrefetching', event.detail.visit)}
+    onprefetched={(event) => internalAlert('linkOnPrefetched', event.detail.response, event.detail.visit)}
     class="link-prefetch-hover"
   >
     Prefetch Event Link (Hover)
   </button>
 
   <!-- Lifecycles -->
-  <a href={'#'} on:click|preventDefault={lifecycleSuccess} class="lifecycle-success">Lifecycle Success</a>
-  <a href={'#'} on:click|preventDefault={lifecycleError} class="lifecycle-error">Lifecycle Error</a>
-  <a href={'#'} on:click|preventDefault={lifecycleCancel} class="lifecycle-cancel">Lifecycle Cancel</a>
-  <a href={'#'} on:click|preventDefault={lifecycleCancelAfterFinish} class="lifecycle-cancel-after-finish"
+  <a href={'#'} onclick={preventDefault(lifecycleSuccess)} class="lifecycle-success">Lifecycle Success</a>
+  <a href={'#'} onclick={preventDefault(lifecycleError)} class="lifecycle-error">Lifecycle Error</a>
+  <a href={'#'} onclick={preventDefault(lifecycleCancel)} class="lifecycle-cancel">Lifecycle Cancel</a>
+  <a href={'#'} onclick={preventDefault(lifecycleCancelAfterFinish)} class="lifecycle-cancel-after-finish"
     >Lifecycle Cancel - After Finish</a
   >
 </div>

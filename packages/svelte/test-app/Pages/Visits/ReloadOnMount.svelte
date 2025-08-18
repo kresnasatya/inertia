@@ -2,7 +2,7 @@
   import { router } from '@inertiajs/svelte'
   import { onMount } from 'svelte'
 
-  export let name
+  let { name } = $props();
 
   onMount(() => {
     router.reload({ only: ['name'] })

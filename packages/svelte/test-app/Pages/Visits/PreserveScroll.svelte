@@ -1,11 +1,17 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export { default as layout } from '@/Layouts/WithScrollRegion.svelte'
 </script>
 
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { router } from '@inertiajs/svelte'
 
-  export let foo: string = 'default'
+  interface Props {
+    foo?: string;
+  }
+
+  let { foo = 'default' }: Props = $props();
 
   const preserve = () => {
     router.visit('/visits/preserve-scroll-page-two', {
@@ -67,13 +73,13 @@
   </span>
   <span class="foo">Foo is now {foo}</span>
 
-  <a href={'#'} on:click|preventDefault={preserve} class="preserve">Preserve Scroll</a>
-  <a href={'#'} on:click|preventDefault={preserveFalse} class="reset">Reset Scroll</a>
-  <a href={'#'} on:click|preventDefault={preserveCallback} class="preserve-callback">Preserve Scroll (Callback)</a>
+  <a href={'#'} onclick={preventDefault(preserve)} class="preserve">Preserve Scroll</a>
+  <a href={'#'} onclick={preventDefault(preserveFalse)} class="reset">Reset Scroll</a>
+  <a href={'#'} onclick={preventDefault(preserveCallback)} class="preserve-callback">Preserve Scroll (Callback)</a>
   <br />
-  <a href={'#'} on:click|preventDefault={preserveCallbackFalse} class="reset-callback">Reset Scroll (Callback)</a>
-  <a href={'#'} on:click|preventDefault={preserveGet} class="preserve-get">Preserve Scroll (GET)</a>
-  <a href={'#'} on:click|preventDefault={preserveGetFalse} class="reset-get">Reset Scroll (GET)</a>
+  <a href={'#'} onclick={preventDefault(preserveCallbackFalse)} class="reset-callback">Reset Scroll (Callback)</a>
+  <a href={'#'} onclick={preventDefault(preserveGet)} class="preserve-get">Preserve Scroll (GET)</a>
+  <a href={'#'} onclick={preventDefault(preserveGetFalse)} class="reset-get">Reset Scroll (GET)</a>
 
   <a href="/non-inertia" class="off-site">Off-site link</a>
 </div>

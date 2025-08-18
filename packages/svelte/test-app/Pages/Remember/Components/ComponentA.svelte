@@ -1,7 +1,12 @@
 <script lang="ts">
   import { useRemember } from '@inertiajs/svelte'
+  interface Props {
+    [key: string]: any
+  }
 
-  let untracked = ''
+  let { ...rest }: Props = $props();
+
+  let untracked = $state('')
 
   const data = useRemember(
     {
@@ -12,7 +17,7 @@
   )
 </script>
 
-<div {...$$restProps}>
+<div {...rest}>
   <span>This component uses a string 'key' for the remember functionality.</span>
   <label>
     Full Name

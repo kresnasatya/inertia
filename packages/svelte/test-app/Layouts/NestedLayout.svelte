@@ -1,8 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { page } from '@inertiajs/svelte'
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  let createdAt: number | null = null
+  let { children }: Props = $props();
+
+  let createdAt: number | null = $state(null)
 
   onMount(() => {
     window._inertia_nested_layout_id = crypto.randomUUID()
@@ -15,6 +20,6 @@
   <span>Nested Layout</span>
   <span>{createdAt}</span>
   <div>
-    <slot />
+    {@render children?.()}
   </div>
 </div>

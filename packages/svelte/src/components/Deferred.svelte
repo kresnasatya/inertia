@@ -2,10 +2,16 @@
   import { page } from '../index'
   import { onDestroy } from 'svelte'
 
-  export let data: string | string[]
+  interface Props {
+    data: string | string[];
+    fallback?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
+
+  let { data, fallback, children }: Props = $props();
 
   const keys = Array.isArray(data) ? data : [data]
-  let loaded = false
+  let loaded = $state(false)
 
   const isServer = typeof window === 'undefined'
 
@@ -22,13 +28,13 @@
     })
   }
 
-  if (!$$slots.fallback) {
+  if (!fallback) {
     throw new Error('`<Deferred>` requires a `<svelte:fragment slot="fallback">` slot')
   }
 </script>
 
 {#if loaded}
-  <slot />
+  {@render children?.()}
 {:else}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

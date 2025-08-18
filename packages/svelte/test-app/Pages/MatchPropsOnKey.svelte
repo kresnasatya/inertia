@@ -1,16 +1,20 @@
 <script lang="ts">
   import { router } from '@inertiajs/svelte'
 
-  export let foo: {
+  interface Props {
+    foo: {
     page: number
     data: Array<{ name: string }>
     companies: Array<{ name: string }>
     teams: Array<{ name: string }>
     per_page: number
     meta: { label: string }
+  };
+    bar: number[];
+    baz: number[];
   }
-  export let bar: number[]
-  export let baz: number[]
+
+  let { foo, bar, baz }: Props = $props();
 
   let page = foo.page
 
@@ -49,5 +53,5 @@
 <div>foo.page is {foo.page}</div>
 <div>foo.per_page is {foo.per_page}</div>
 <div>foo.meta.label is {foo.meta.label}</div>
-<button on:click={reloadIt}>Reload</button>
-<button on:click={getFresh}>Get Fresh</button>
+<button onclick={reloadIt}>Reload</button>
+<button onclick={getFresh}>Get Fresh</button>

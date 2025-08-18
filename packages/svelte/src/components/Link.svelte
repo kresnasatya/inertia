@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import type {
     CacheForOption,
     FormDataConvertible,
@@ -9,34 +12,58 @@
   } from '@inertiajs/core'
   import { inertia } from '../index'
 
-  export let href: string | UrlMethodPair = ''
-  export let as: keyof HTMLElementTagNameMap = 'a'
-  export let data: Record<string, FormDataConvertible> = {}
-  export let method: Method = 'get'
-  export let replace: boolean = false
-  export let preserveScroll: PreserveStateOption = false
-  export let preserveState: PreserveStateOption | null = null
-  export let only: string[] = []
-  export let except: string[] = []
-  export let headers: Record<string, string> = {}
-  export let queryStringArrayFormat: 'brackets' | 'indices' = 'brackets'
-  export let async: boolean = false
-  export let prefetch: boolean | LinkPrefetchOption | LinkPrefetchOption[] = false
-  export let cacheFor: CacheForOption | CacheForOption[] = 0
-  export let cacheTags: string | string[] = []
+  interface Props {
+    href?: string | UrlMethodPair;
+    as?: keyof HTMLElementTagNameMap;
+    data?: Record<string, FormDataConvertible>;
+    method?: Method;
+    replace?: boolean;
+    preserveScroll?: PreserveStateOption;
+    preserveState?: PreserveStateOption | null;
+    only?: string[];
+    except?: string[];
+    headers?: Record<string, string>;
+    queryStringArrayFormat?: 'brackets' | 'indices';
+    async?: boolean;
+    prefetch?: boolean | LinkPrefetchOption | LinkPrefetchOption[];
+    cacheFor?: CacheForOption | CacheForOption[];
+    cacheTags?: string | string[];
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
 
-  $: _method = typeof href === 'object' ? href.method : method
-  $: _href = typeof href === 'object' ? href.url : href
+  let {
+    href = '',
+    as = 'a',
+    data = {},
+    method = 'get',
+    replace = false,
+    preserveScroll = false,
+    preserveState = null,
+    only = [],
+    except = [],
+    headers = {},
+    queryStringArrayFormat = 'brackets',
+    async = false,
+    prefetch = false,
+    cacheFor = 0,
+    cacheTags = [],
+    children,
+    ...rest
+  }: Props = $props();
 
-  $: asProp = _method !== 'get' ? 'button' : as.toLowerCase()
-  $: elProps =
-    {
+  let _method = $derived(typeof href === 'object' ? href.method : method)
+  let _href = $derived(typeof href === 'object' ? href.url : href)
+
+  let asProp = $derived(_method !== 'get' ? 'button' : as.toLowerCase())
+  let elProps =
+    $derived({
       a: { href: _href },
       button: { type: 'button' },
-    }[asProp] || {}
+    }[asProp] || {})
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <svelte:element
   this={asProp}
   use:inertia={{
@@ -55,27 +82,27 @@
     cacheFor,
     cacheTags,
   }}
-  {...$$restProps}
+  {...rest}
   {...elProps}
-  on:focus
-  on:blur
-  on:click
-  on:dblclick
-  on:mousedown
-  on:mousemove
-  on:mouseout
-  on:mouseover
-  on:mouseup
-  on:cancel-token
-  on:before
-  on:start
-  on:progress
-  on:finish
-  on:cancel
-  on:success
-  on:error
-  on:prefetching
-  on:prefetched
+  onfocus={bubble('focus')}
+  onblur={bubble('blur')}
+  onclick={bubble('click')}
+  ondblclick={bubble('dblclick')}
+  onmousedown={bubble('mousedown')}
+  onmousemove={bubble('mousemove')}
+  onmouseout={bubble('mouseout')}
+  onmouseover={bubble('mouseover')}
+  onmouseup={bubble('mouseup')}
+  oncancel-token={bubble('cancel-token')}
+  onbefore={bubble('before')}
+  onstart={bubble('start')}
+  onprogress={bubble('progress')}
+  onfinish={bubble('finish')}
+  oncancel={bubble('cancel')}
+  onsuccess={bubble('success')}
+  onerror={bubble('error')}
+  onprefetching={bubble('prefetching')}
+  onprefetched={bubble('prefetched')}
 >
-  <slot />
+  {@render children?.()}
 </svelte:element>

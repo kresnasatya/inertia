@@ -1,8 +1,14 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { router } from '@inertiajs/svelte'
   import { onMount } from 'svelte'
 
-  export let foo = 'default'
+  interface Props {
+    foo?: string;
+  }
+
+  let { foo = 'default' }: Props = $props();
 
   onMount(() => {
     window._inertia_page_key = crypto.randomUUID()
@@ -87,12 +93,12 @@
     <input type="text" name="example-field" class="field" />
   </label>
 
-  <a href={'#'} on:click|preventDefault={preserve} class="preserve">[State] Preserve visit: true</a>
-  <a href={'#'} on:click|preventDefault={preserveFalse} class="preserve-false">[State] Preserve visit: false</a>
-  <a href={'#'} on:click|preventDefault={preserveCallback} class="preserve-callback">[State] Preserve Callback: true</a>
-  <a href={'#'} on:click|preventDefault={preserveCallbackFalse} class="preserve-callback-false"
+  <a href={'#'} onclick={preventDefault(preserve)} class="preserve">[State] Preserve visit: true</a>
+  <a href={'#'} onclick={preventDefault(preserveFalse)} class="preserve-false">[State] Preserve visit: false</a>
+  <a href={'#'} onclick={preventDefault(preserveCallback)} class="preserve-callback">[State] Preserve Callback: true</a>
+  <a href={'#'} onclick={preventDefault(preserveCallbackFalse)} class="preserve-callback-false"
     >[State] Preserve Callback: false</a
   >
-  <a href={'#'} on:click|preventDefault={preserveGet} class="preserve-get">[State] Preserve GET: true</a>
-  <a href={'#'} on:click|preventDefault={preserveGetFalse} class="preserve-get-false">[State] Preserve GET: false</a>
+  <a href={'#'} onclick={preventDefault(preserveGet)} class="preserve-get">[State] Preserve GET: true</a>
+  <a href={'#'} onclick={preventDefault(preserveGetFalse)} class="preserve-get-false">[State] Preserve GET: false</a>
 </div>

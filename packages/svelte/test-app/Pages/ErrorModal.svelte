@@ -12,15 +12,15 @@
 
 <div>
   <span
-    on:click={invalidVisit}
-    on:keydown={(e) => e.key === 'Enter' && invalidVisit()}
+    onclick={invalidVisit}
+    onkeydown={(e) => e.key === 'Enter' && invalidVisit()}
     role="button"
     tabindex="0"
     class="invalid-visit">Invalid Visit</span
   >
   <span
-    on:click={invalidVisitJson}
-    on:keydown={(e) => e.key === 'Enter' && invalidVisitJson()}
+    onclick={invalidVisitJson}
+    onkeydown={(e) => e.key === 'Enter' && invalidVisitJson()}
     role="button"
     tabindex="0"
     class="invalid-visit-json">Invalid Visit (JSON response)</span

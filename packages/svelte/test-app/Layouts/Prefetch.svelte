@@ -1,5 +1,10 @@
 <script lang="ts">
   import { inertia } from '@inertiajs/svelte'
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 </script>
 
 <div>
@@ -9,6 +14,6 @@
   <a href="/prefetch/4" use:inertia={{ prefetch: ['hover', 'mount'], cacheFor: '1s' }}>On Hover + Mount</a>
   <a href="/prefetch/5" use:inertia={{ prefetch: 'mount', cacheFor: '0' }}>On Mount (Once)</a>
   <div>
-    <slot />
+    {@render children?.()}
   </div>
 </div>

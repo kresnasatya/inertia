@@ -14,38 +14,69 @@
 
   const noop = () => undefined
 
-  export let action: FormComponentProps['action'] = ''
-  export let method: FormComponentProps['method'] = 'get'
-  export let headers: FormComponentProps['headers'] = {}
-  export let queryStringArrayFormat: FormComponentProps['queryStringArrayFormat'] = 'brackets'
-  export let errorBag: FormComponentProps['errorBag'] = null
-  export let showProgress: FormComponentProps['showProgress'] = true
-  export let transform: FormComponentProps['transform'] = (data) => data
-  export let options: FormComponentProps['options'] = {}
-  export let onCancelToken: FormComponentProps['onCancelToken'] = noop
-  export let onBefore: FormComponentProps['onBefore'] = noop
-  export let onStart: FormComponentProps['onStart'] = noop
-  export let onProgress: FormComponentProps['onProgress'] = noop
-  export let onFinish: FormComponentProps['onFinish'] = noop
-  export let onCancel: FormComponentProps['onCancel'] = noop
-  export let onSuccess: FormComponentProps['onSuccess'] = noop
-  export let onError: FormComponentProps['onError'] = noop
-  export let onSubmitComplete: FormComponentProps['onSubmitComplete'] = noop
-  export let disableWhileProcessing: boolean = false
-  export let invalidateCacheTags: FormComponentProps['invalidateCacheTags'] = []
-  export let resetOnError: FormComponentProps['resetOnError'] = false
-  export let resetOnSuccess: FormComponentProps['resetOnSuccess'] = false
-  export let setDefaultsOnSuccess: FormComponentProps['setDefaultsOnSuccess'] = false
+  interface Props {
+    action?: FormComponentProps['action'];
+    method?: FormComponentProps['method'];
+    headers?: FormComponentProps['headers'];
+    queryStringArrayFormat?: FormComponentProps['queryStringArrayFormat'];
+    errorBag?: FormComponentProps['errorBag'];
+    showProgress?: FormComponentProps['showProgress'];
+    transform?: FormComponentProps['transform'];
+    options?: FormComponentProps['options'];
+    onCancelToken?: FormComponentProps['onCancelToken'];
+    onBefore?: FormComponentProps['onBefore'];
+    onStart?: FormComponentProps['onStart'];
+    onProgress?: FormComponentProps['onProgress'];
+    onFinish?: FormComponentProps['onFinish'];
+    onCancel?: FormComponentProps['onCancel'];
+    onSuccess?: FormComponentProps['onSuccess'];
+    onError?: FormComponentProps['onError'];
+    onSubmitComplete?: FormComponentProps['onSubmitComplete'];
+    disableWhileProcessing?: boolean;
+    invalidateCacheTags?: FormComponentProps['invalidateCacheTags'];
+    resetOnError?: FormComponentProps['resetOnError'];
+    resetOnSuccess?: FormComponentProps['resetOnSuccess'];
+    setDefaultsOnSuccess?: FormComponentProps['setDefaultsOnSuccess'];
+    children?: import('svelte').Snippet<[any]>;
+    [key: string]: any
+  }
+
+  let {
+    action = '',
+    method = 'get',
+    headers = {},
+    queryStringArrayFormat = 'brackets',
+    errorBag = null,
+    showProgress = true,
+    transform = (data) => data,
+    options = {},
+    onCancelToken = noop,
+    onBefore = noop,
+    onStart = noop,
+    onProgress = noop,
+    onFinish = noop,
+    onCancel = noop,
+    onSuccess = noop,
+    onError = noop,
+    onSubmitComplete = noop,
+    disableWhileProcessing = false,
+    invalidateCacheTags = [],
+    resetOnError = false,
+    resetOnSuccess = false,
+    setDefaultsOnSuccess = false,
+    children,
+    ...rest
+  }: Props = $props();
 
   type FormSubmitOptions = Omit<VisitOptions, 'data' | 'onPrefetched' | 'onPrefetching'>
 
   const form = useForm({})
-  let formElement: HTMLFormElement
-  let isDirty = false
+  let formElement: HTMLFormElement = $state()
+  let isDirty = $state(false)
   let defaultData: FormData = new FormData()
 
-  $: _method = typeof action === 'object' ? action.method : (method.toLowerCase() as FormComponentProps['method'])
-  $: _action = typeof action === 'object' ? action.url : action
+  let _method = $derived(typeof action === 'object' ? action.method : (method.toLowerCase() as FormComponentProps['method']))
+  let _action = $derived(typeof action === 'object' ? action.url : action)
 
   function getFormData(): FormData {
     return new FormData(formElement)
@@ -163,29 +194,16 @@
       formEvents.forEach((e) => formElement?.removeEventListener(e, updateDirtyState))
     }
   })
-  $: slotErrors = $form.errors as Errors
+  let slotErrors = $derived($form.errors as Errors)
 </script>
 
 <form
   bind:this={formElement}
   action={_action}
   method={_method}
-  on:submit={handleSubmit}
-  {...$$restProps}
+  onsubmit={handleSubmit}
+  {...rest}
   inert={disableWhileProcessing && $form.processing ? true : undefined}
 >
-  <slot
-    errors={slotErrors}
-    hasErrors={$form.hasErrors}
-    processing={$form.processing}
-    progress={$form.progress}
-    wasSuccessful={$form.wasSuccessful}
-    recentlySuccessful={$form.recentlySuccessful}
-    {clearErrors}
-    {resetAndClearErrors}
-    {setError}
-    {isDirty}
-    {submit}
-    {defaults}
-  />
+  {@render children?.({ errors: slotErrors, hasErrors: $form.hasErrors, processing: $form.processing, progress: $form.progress, wasSuccessful: $form.wasSuccessful, recentlySuccessful: $form.recentlySuccessful, clearErrors, resetAndClearErrors, setError, isDirty, submit, defaults, })}
 </form>

@@ -53,8 +53,8 @@
     <input type="checkbox" id="remember" name="remember" bind:checked={$form.remember} />
   </label>
 
-  <button on:click={postForm} class="post">POST form</button>
-  <button on:click={putForm} class="put">PUT form</button>
-  <button on:click={patchForm} class="patch">PATCH form</button>
-  <button on:click={deleteForm} class="delete">DELETE form</button>
+  <button onclick={postForm} class="post">POST form</button>
+  <button onclick={putForm} class="put">PUT form</button>
+  <button onclick={patchForm} class="patch">PATCH form</button>
+  <button onclick={deleteForm} class="delete">DELETE form</button>
 </div>

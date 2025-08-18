@@ -68,5 +68,5 @@
     v0.3
     <input type="checkbox" id="tag-2" value="v0.3" bind:group={$form.organization.repo.tags} />
   </label>
-  <button on:click={submit} class="submit">Submit form</button>
+  <button onclick={submit} class="submit">Submit form</button>
 </div>

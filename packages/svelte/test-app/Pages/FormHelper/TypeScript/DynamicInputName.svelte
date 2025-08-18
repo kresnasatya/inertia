@@ -18,4 +18,4 @@
   }
 </script>
 
-<input name="name" type="text" value={$form.name} on:input={handleChange} />
+<input name="name" type="text" value={$form.name} oninput={handleChange} />

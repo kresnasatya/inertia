@@ -8,9 +8,13 @@
     remember: boolean
   }
 
-  export let user: {
+  interface Props {
+    user?: {
     username?: string | null
-  } | null = null
+  } | null;
+  }
+
+  let { user = null }: Props = $props();
 
   useForm<LoginData>({
     username: user?.username ?? '',

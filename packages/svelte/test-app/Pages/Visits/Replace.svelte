@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { router } from '@inertiajs/svelte'
 
   const replace = () => {
@@ -37,8 +39,8 @@
 <div>
   <span class="text">This is the links page that demonstrates manual replace</span>
 
-  <a href={'#'} on:click|preventDefault={replace} class="replace">[State] Replace visit: true</a>
-  <a href={'#'} on:click|preventDefault={replaceFalse} class="replace-false">[State] Replace visit: false</a>
-  <a href={'#'} on:click|preventDefault={replaceGet} class="replace-get">[State] Replace GET: true</a>
-  <a href={'#'} on:click|preventDefault={replaceGetFalse} class="replace-get-false">[State] Replace GET: false</a>
+  <a href={'#'} onclick={preventDefault(replace)} class="replace">[State] Replace visit: true</a>
+  <a href={'#'} onclick={preventDefault(replaceFalse)} class="replace-false">[State] Replace visit: false</a>
+  <a href={'#'} onclick={preventDefault(replaceGet)} class="replace-get">[State] Replace GET: true</a>
+  <a href={'#'} onclick={preventDefault(replaceGetFalse)} class="replace-get-false">[State] Replace GET: false</a>
 </div>

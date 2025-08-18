@@ -1,10 +1,19 @@
 <script lang="ts">
   import { inertia } from '@inertiajs/svelte'
 
-  export let foo = 0
-  export let bar
-  export let baz
-  export let headers
+  interface Props {
+    foo?: number;
+    bar: any;
+    baz: any;
+    headers: any;
+  }
+
+  let {
+    foo = 0,
+    bar,
+    baz,
+    headers
+  }: Props = $props();
 </script>
 
 <div>
